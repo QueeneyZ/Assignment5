@@ -9,8 +9,8 @@ set RAM[0] 0,  //Clear R0
 set RAM[1] 5,  // R1 = 5
 set RAM[2] 0,  // R2 = 0
 
-repeat 200 {
-    ticktock;    // Run for 200 clock cycles
+repeat 5000 {
+    ticktock;    // Run for 5000 clock cycles
 }
 
 set RAM[1] 5,
