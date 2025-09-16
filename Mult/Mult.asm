@@ -8,87 +8,71 @@
 
 // Put your code here.
 
-// ---------------- INIT ----------------
     @R0
-    M=0            // R0 = 0 (result)
+    M=0        // R0 = 0
 
     @Sign
-    M=0            // Sign = 0 (0 = positive, 1 = negative, 2 = double negative)
+    M=0        // Sign = 0 (0 = positive, 1 = negative)
 
-// ---------------- Check R1 ----------------
+// Check R1 sign
     @R1
     D=M
     @R1_POS
-    D;JGE          // if R1 >= 0, skip
-    D=-D
+    D;JGE      // if R1 >= 0, skip
+    D=-D       // else: make it positive
     @R1
-    M=D            // R1 = abs(R1)
+    M=D
     @Sign
-    M=M+1          // Sign++
+    M=M+1      // flip sign
 
 (R1_POS)
-
-// ---------------- Check R2 ----------------
+// Check R2 sign
     @R2
     D=M
     @R2_POS
-    D;JGE          // if R2 >= 0, skip
+    D;JGE
     D=-D
     @R2
-    M=D            // R2 = abs(R2)
+    M=D
     @Sign
-    M=M+1          // Sign++
+    M=M+1      // flip sign
 
 (R2_POS)
-
-// ---------------- Counter = R2 ----------------
+// Counter = R2
     @R2
     D=M
     @Counter
     M=D
 
-// ---------------- Loop: R0 += R1 ----------------
+// Loop: R0 += R1
 (LOOP)
     @Counter
     D=M
     @END_LOOP
-    D;JEQ          // if Counter == 0 -> end
+    D;JEQ      // if counter == 0, end
 
     @R1
     D=M
     @R0
-    M=M+D          // R0 += R1
+    M=M+D      // R0 += R1
 
     @Counter
-    M=M-1          // Counter--
+    M=M-1      // counter--
 
     @LOOP
     0;JMP
 
-// ---------------- End Loop ----------------
+// Negate result if needed
 (END_LOOP)
     @Sign
     D=M
     @NO_NEG
-    D;JEQ          // if Sign == 0 -> result is positive -> done
+    D;JEQ      // if Sign==0, result is positive → skip
 
-    @Sign
-    D=M
-    D=D-2
-    @NO_NEG
-    D;JEQ          // if Sign == 2 -> double negative -> result positive
-
-    // else -> Sign == 1 -> make result negative
     @R0
-    M=-M
+    M=-M       // else negate result
 
 (NO_NEG)
 (END)
     @END
-    0;JMP          // infinite loop
-
-// ---------------- Variables ----------------
-(Sign)
-   0
-(Counter)
-   0
+    0;JMP      // infinite loop
