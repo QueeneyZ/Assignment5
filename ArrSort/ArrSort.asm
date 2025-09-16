@@ -4,42 +4,50 @@
 // Put your code here.
 
 
-    @R0
-    M=0         // R0 -> 0 (not finished)
+     @R0
+    M=0       // R0 = 0 (initial)
 
     @R2
     D=M
     @N
-    M=D         // N = length
+    M=D       // N = length
 
     @R1
     D=M
-    @BASE
-    M=D         // BASE = array start
+    @BASE 
+    M=D       // BASE = start address
 
     @i
-    M=0         // i -> 0
+    M=0       // i = 0
 
 (OUTER_LOOP)
     @i
     D=M
     @N
-    D=M-D
+    D=D-M
     @DONE
-    D;JLE       // if i >= N -> done
+    D;JGE     // if i >= N -> done
 
     @j
-    M=0         // j -> 0
+    M=0       // j = 0
 
 (INNER_LOOP)
     @j
     D=M
     @N
+    D=D-M
+    @NEXT_OUTER
+    D;JGE     // if j >= N -> break
+
+    // if j >= N-1 → skip (prevent out of bounds)
+    @j
+    D=M
+    @N
     D=M-D
     @NEXT_OUTER
-    D;JLE       // if j >= N-1 -> go next outer
+    D;JEQ
 
-    // --- compute addr j ---
+    // addr = BASE + j
     @BASE
     D=M
     @j
@@ -47,14 +55,14 @@
     @ADDR
     M=D
 
-    // --- arr[j] -> VAL1 ---
+    // arr[j]
     @ADDR
     A=M
     D=M
     @VAL1
     M=D
 
-    // --- arr[j+1] -> VAL2 ---
+    // arr[j+1]
     @ADDR
     D=M+1
     @ADDR2
@@ -70,9 +78,9 @@
     @VAL2
     D=D-M
     @SKIP_SWAP
-    D;JLE       // if arr[j] <= arr[j+1] -> skip swap
+    D;JLE     // if arr[j] <= arr[j+1] -> skip
 
-    // --- swap ---
+    // swap
     @VAL1
     D=M
     @ADDR2
@@ -99,16 +107,24 @@
 
 (DONE)
     @R0
-    M=-1        // done
+    M=-1
     @DONE
     0;JMP
 
-// -------- variables --------
-(N)
-(BASE)
-(i)
-(j)
+// -------- Variables --------
 (ADDR)
+    @0
 (ADDR2)
+    @0
 (VAL1)
+    @0
 (VAL2)
+    @0
+(N)
+    @0
+(BASE)
+    @0
+(i)
+    @0
+(j)
+    @0
