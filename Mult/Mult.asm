@@ -7,40 +7,64 @@
 // (R0, R1, R2 refer to RAM[0], RAM[1], and RAM[2], respectively.)
 
 // Put your code here.
-    @R0  //Initialisation result R0 = 0
-    M=0
+    @R0  
+    M=0   //result = 0
 
-    @Sign  // Save Symbol Sign
-    M=0    // Sign = 0
+    // check if R1 < 0
+    @R1
+    D=M
+    @CHECK_R2
+    D;JNE
+    @END 
+    0;JMP
+
+(CHECK_R2)
+    // check if R2 == 0
+    @R2
+    D=M
+    @SETZERO
+    D;JEQ
+    @CONT 
+    0;JMP
+
+(SETZERO)
+    @R0
+    M=0
+    @END
+    0;JMP
+
+(CONT)
+    // initialise sign = 0
+    @Sign
+    M=0
 
     // if R1 < 0
     @R1
-    D=M
+    D=M 
     @R1_POS
-    D;JGE    // if R1 >= 0 jump
-    D=-D     // D = -R1
-    @R1
-    M=D      // R1 = abs(R1)
+    D;JGE
+    D=-D
+    @R1 
+    M=D 
     @Sign
-    M=M+1     // Sign++
-
+    M=M+1
 (R1_POS)
+
     // if R2 < 0
     @R2
-    D=M
+    D=M 
     @R2_POS
     D;JGE
     D=-D
-    @R2
-    M=D
+    @R2 
+    M=D 
     @Sign
-    M=M+1    // Sign++
-
+    M=M+1
 (R2_POS)
 
-    // set counter R2 -> counter
+    // Counter = R2
     @R2
-    D=M
+    D=M 
     @Counter
     M=D
 
@@ -48,15 +72,13 @@
     @Counter
     D=M
     @END_LOOP
-    D;JEQ   // If Counter == 0, jump out
+    D;JEQ
 
-    // R0 = R0 + R1
     @R1
     D=M
-    @R0
-    M=M+D
+    @R0 
+    M=M+D 
 
-    // Counter--
     @Counter
     M=M-1
 
@@ -64,19 +86,28 @@
     0;JMP
 
 (END_LOOP)
-    // If Sign % 2 == 1, take the negative.
+    // If Sign == 1 -> negative
     @Sign
-    D=M
-    @NO_NEG
-    D=D%2       // Hack assembly can't do remainder directly, you need to make sure Sign <= 2 yourself.
-    @NO_NEG
+    D=M 
+    @CHECK_TWO
     D;JEQ
-
-    // R0 = -R0
     @R0
     M=-M
+    @END
+    0;JMP 
 
-(NO_NEG)
+(CHECK_TWO)
+    // if sign==2 (two negatives) -> positive, do nothing
+    @END
+    0;JMP
+
 (END)
     @END
-    0;JMP   // infinite loop
+    0;JMP
+
+// --------- Variables ----------
+(Sign)
+    @0
+(Counter)
+    @0
+    
