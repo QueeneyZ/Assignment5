@@ -3,21 +3,22 @@
 
 // Put your code here.
 
+
     @R0
-    M=0            // R0 -> 0 (not finished)
+    M=0         // R0 -> 0 (not finished)
 
     @R2
     D=M
     @N
-    M=D            // N -> array length
+    M=D         // N = length
 
     @R1
     D=M
     @BASE
-    M=D            // BASE -> start address
+    M=D         // BASE = array start
 
     @i
-    M=0            // i -> 0
+    M=0         // i -> 0
 
 (OUTER_LOOP)
     @i
@@ -25,10 +26,10 @@
     @N
     D=M-D
     @DONE
-    D;JLE          // if i >= N -> done
+    D;JLE       // if i >= N -> done
 
     @j
-    M=0            // j -> 0
+    M=0         // j -> 0
 
 (INNER_LOOP)
     @j
@@ -36,7 +37,7 @@
     @N
     D=M-D
     @NEXT_OUTER
-    D;JLE          // if j >= N-i-1 -> exit inner
+    D;JLE       // if j >= N-1 -> go next outer
 
     // --- compute addr j ---
     @BASE
@@ -63,15 +64,15 @@
     @VAL2
     M=D
 
-    // --- compare arr[j] - arr[j+1] ---
+    // compare arr[j] - arr[j+1]
     @VAL1
     D=M
     @VAL2
     D=D-M
     @SKIP_SWAP
-    D;JLE          // if arr[j] <= arr[j+1] -> skip
+    D;JLE       // if arr[j] <= arr[j+1] -> skip swap
 
-    // --- swap VAL1 <-> VAL2 ---
+    // --- swap ---
     @VAL1
     D=M
     @ADDR2
@@ -98,11 +99,11 @@
 
 (DONE)
     @R0
-    M=-1           // done -> R0 = True
+    M=-1        // done
     @DONE
     0;JMP
 
-// -------- variables (assembler will allocate) --------
+// -------- variables --------
 (N)
 (BASE)
 (i)
