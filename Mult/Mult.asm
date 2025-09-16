@@ -70,15 +70,15 @@
     @Sign
     D=M
     @NO_NEG
-    D;JEQ          // if Sign == 0 → result is positive → done
+    D;JEQ          // if Sign == 0 -> result is positive -> done
 
     @Sign
     D=M
     D=D-2
     @NO_NEG
-    D;JEQ          // if Sign == 2 → double negative → result positive
+    D;JEQ          // if Sign == 2 -> double negative -> result positive
 
-    // else → Sign == 1 → make result negative
+    // else -> Sign == 1 -> make result negative
     @R0
     M=-M
 
