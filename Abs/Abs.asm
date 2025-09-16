@@ -25,7 +25,7 @@
 
 (END)
     @END
-    0;JMP   // Inifinite loop, end of programme
+    0;JMP   // Inifinite loop, End of programme
 
 
 

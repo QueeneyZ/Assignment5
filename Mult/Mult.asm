@@ -48,7 +48,7 @@
     @Counter
     D=M
     @END_LOOP
-    D;JEQ   // if Counter == 0, jump out
+    D;JEQ   // If Counter == 0, jump out
 
     // R0 = R0 + R1
     @R1

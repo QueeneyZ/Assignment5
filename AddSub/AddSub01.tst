@@ -11,7 +11,7 @@ set RAM[2] 3,  // R2 = 3
 set RAM[3] 2,  // R3 = 2
 
 repeat 100 {
-    ticktock;   // Run program for 100 cycles
+    ticktock;   // Run the program for 100 cycles
 }
 
 set RAM[1] 5,
