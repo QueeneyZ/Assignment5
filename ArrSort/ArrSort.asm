@@ -9,96 +9,104 @@
     @R2
     D=M
     @N
-    M=D       // N = array length
+    M=D       // N = length
 
     @R1
     D=M
     @BASE 
-    M=D       // BASE = first address of array
+    M=D       // BASE = start address
 
     @i
-    M=0       // i = 0 (outer loop index)
+    M=0       // i = 0
 
 (OUTER_LOOP)
     @i
-    D=M 
-    @N 
-    D=D-M 
+    D=M
+    @N
+    D=D-M
     @DONE
     D;JGE     // if i >= N -> done
 
     @j
-    M=0       // j = 0 (inner loop index)
+    M=0       // j = 0
 
 (INNER_LOOP)
     @j
-    D=M 
+    D=M
     @N
-    D=D-M 
+    D=D-M
     @NEXT_OUTER
-    D;JGE     // if j >= N -> go to next outer loop
+    D;JGE     // if j >= N -> break
+
+    // if j >= N-1 → skip (prevent out of bounds)
+    @j
+    D=M
+    @N
+    D=M-D
+    @NEXT_OUTER
+    D;JEQ
 
     // addr = BASE + j
     @BASE
     D=M
-    @j 
-    D=D+M 
-    @ADDR 
-    M=D 
+    @j
+    D=D+M
+    @ADDR
+    M=D
 
-    // load arr[j]
-    @ADDR 
-    A=M 
+    // arr[j]
+    @ADDR
+    A=M
     D=M
     @VAL1
-    M=D 
+    M=D
 
-    // load arr[j+1]
-    @ADDR 
+    // arr[j+1]
+    @ADDR
     D=M+1
     @ADDR2
-    M=D 
+    M=D
     A=D
-    D=M 
+    D=M
     @VAL2
-    M=D 
+    M=D
 
-    // compare arr[j] and arr[j+1]
+    // compare arr[j] - arr[j+1]
     @VAL1
-    D=M          // D = arr[j]
+    D=M
     @VAL2
-    D=D-M        // D = arr[j] - arr[j+1]
+    D=D-M
     @SKIP_SWAP
-    D;JLE        // if arr[j] <= arr[j+1] -> skip swap
+    D;JLE     // if arr[j] <= arr[j+1] -> skip
 
-    // ---- swap arr[j] and arr[j+1] ----
+    // swap
     @VAL1
     D=M
     @ADDR2
     A=M
-    M=D          // arr[j+1] = VAL1
+    M=D
 
     @VAL2
     D=M
     @ADDR
     A=M
-    M=D          // arr[j] = VAL2
+    M=D
 
 (SKIP_SWAP)
-    @j 
-    M=M+1        // j++
+    @j
+    M=M+1
     @INNER_LOOP
     0;JMP
 
 (NEXT_OUTER)
-    @i 
-    M=M+1        // i++
+    @i
+    M=M+1
     @OUTER_LOOP
     0;JMP
 
 (DONE)
     @R0
-    M=-1         // finished: R0 = true (-1)
+    M=-1
     @DONE
     0;JMP
 
