@@ -9,70 +9,83 @@
 // Put your code here.
 
     @R0
-    M=0        // R0 = 0
-
-    @Sign
-    M=0        // Sign = 0 (0 = positive, 1 = negative)
-
-// Check R1 sign
+    M=0        //R0 = 0
     @R1
     D=M
-    @R1_POS
-    D;JGE      // if R1 >= 0, skip
-    D=-D       // else: make it positive
-    @R1
+    @x
     M=D
-    @Sign
-    M=M+1      // flip sign
-
-(R1_POS)
-// Check R2 sign
-    @R2
+    @R2 
+    D=M 
+    @y
+    M=D 
+    @sign
+    M=0
+    @x
+    D=M 
+    @POSX
+    D;JGE 
+    @x
+    M=-M
+    @sign
+    M=!M
+    (POSX)
+    @y
     D=M
-    @R2_POS
-    D;JGE
-    D=-D
-    @R2
+    @POSY
+    D;JGE 
+    @y
+    M=-M
+    @sign 
+    M=!M
+    (POSY)
+    @x
+    D=M
+    @y
+    D=D-M 
+    @SWAP
+    D;JGT
+    @x
+    D=M
+    @count
     M=D
-    @Sign
-    M=M+1      // flip sign
-
-(R2_POS)
-// Counter = R2
-    @R2
-    D=M
-    @Counter
-    M=D
-
-// Loop: R0 += R1
-(LOOP)
-    @Counter
-    D=M
-    @END_LOOP
-    D;JEQ      // if counter == 0, end
-
-    @R1
-    D=M
-    @R0
-    M=M+D      // R0 += R1
-
-    @Counter
-    M=M-1      // counter--
-
-    @LOOP
+    @y 
+    D=M 
+    @addend
+    M=D 
+    @MULTIPLY
     0;JMP
-
-// Negate result if needed
-(END_LOOP)
-    @Sign
+    (SWAP)
+    @y 
     D=M
-    @NO_NEG
-    D;JEQ      // if Sign==0, result is positive → skip
-
+    @count
+    M=D 
+    @x
+    D=M 
+    @addend 
+    M=D 
+    (MULTIPLY)
+    (LOOP)
+    @count 
+    D=M 
+    @END 
+    D;JEQ 
+    @R0 
+    D=M 
+    @addend 
+    D=D+M 
+    @R0 
+    M=D
+    @count
+    M=M-1
+    @LOOP 
+    0;JMP 
+    (END)
+    @sign 
+    D=M
+    @DONE
+    D;JEQ 
     @R0
-    M=-M       // else negate result
-
-(NO_NEG)
-(END)
-    @END
-    0;JMP      // infinite loop
+    M=-M 
+    (DONE)
+    @DONE 
+    0;JMP
